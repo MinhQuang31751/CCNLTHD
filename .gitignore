@@ -1,0 +1,7 @@
+node_modules/
+uploads/
+output/
+.env
+*.zip
+# Chỉ dùng trên máy cục bộ (đổi cổng, tên container)
+docker-compose.override.yml

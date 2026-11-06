@@ -1,0 +1,28 @@
+{
+  "name": "excel-to-pdf-nodejs-main",
+  "version": "2.0.0",
+  "description": "Chuyển đổi hàng loạt file Excel sang PDF: Express 5 + BullMQ + LibreOffice",
+  "main": "server.js",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "worker": "node worker-service.js",
+    "test": "node --test",
+    "test:coverage": "node --test --experimental-test-coverage"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "adm-zip": "0.6.1",
+    "bullmq": "5.81.5",
+    "express": "5.2.1",
+    "libreoffice-convert": "1.8.2",
+    "multer": "2.5.0",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "supertest": "7.2.2"
+  }
+}

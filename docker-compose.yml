@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+
+  # ---- Redis (Job Queue) ----
+  redis:
+    image: redis:7-alpine
+    container_name: excel-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+  # ---- API Server ----
+  api:
+    build: .
+    container_name: excel-api
+    command: node server.js
+    ports:
+      - "3000:3000"
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - PORT=3000
+      - UPLOAD_DIR=uploads
+      - OUTPUT_DIR=output
+    volumes:
+      - ./uploads:/app/uploads
+      - ./output:/app/output
+      - ./public:/app/public
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  # ---- Worker Service (scale ngang tại đây!) ----
+  worker:
+    build: .
+    command: node worker-service.js
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - WORKER_CONCURRENCY=5
+    volumes:
+      - ./uploads:/app/uploads
+      - ./output:/app/output
+    depends_on:
+      - redis
+    restart: unless-stopped
+    # Muốn scale? Chạy: docker compose up --scale worker=5
+    deploy:
+      replicas: 2
+
+volumes:
+  redis_data:

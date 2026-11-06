@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Excel to PDF Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .loader { border-top-color: #3b82f6; animation: spinner 1.5s linear infinite; }
+        @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex items-center justify-center p-6">
+    <div class="max-w-xl w-full bg-slate-800 border border-slate-700 shadow-2xl rounded-2xl p-8">
+
+        <!-- ========== BƯỚC 1: UPLOAD ========== -->
+        <div id="uploadSection">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-extrabold text-blue-400">Excel to PDF Worker</h1>
+            </div>
+
+            <input type="file" id="fileInput" multiple accept=".xlsx" class="hidden">
+            <label for="fileInput" class="group block border-2 border-dashed border-slate-600 rounded-xl p-12 text-center hover:border-blue-500 hover:bg-slate-700/30 transition-all mb-8 cursor-pointer">
+                <div class="text-5xl mb-4 group-hover:scale-110 transition-transform">📁</div>
+                <span id="fileCount" class="text-slate-300 font-semibold text-lg block">Chọn các file Excel (.xlsx)</span>
+                <span class="text-slate-500 text-sm mt-2 block">Kéo thả hoặc nhấn vào đây</span>
+            </label>
+
+            <button onclick="startProcess()" class="w-full bg-blue-600 hover:bg-blue-500 py-4 rounded-xl font-bold shadow-lg shadow-blue-900/20 transition active:scale-95 text-lg">
+                BẮT ĐẦU CHUYỂN ĐỔI
+            </button>
+        </div>
+
+        <!-- ========== BƯỚC 2: ĐANG XỬ LÝ ========== -->
+        <div id="statusSection" class="hidden text-center py-6">
+
+            <!-- Loading + Progress bar -->
+            <div id="loadingUI">
+                <div class="loader ease-linear rounded-full border-4 border-slate-700 h-16 w-16 mb-6 mx-auto"></div>
+                <p class="text-blue-400 font-medium animate-pulse mb-1">Đang chuyển đổi file...</p>
+                <p id="progressText" class="text-slate-400 text-sm mb-4">0%</p>
+
+                <!-- Progress bar -->
+                <div class="w-full bg-slate-700 rounded-full h-3 mb-2">
+                    <div id="progressBar" class="bg-blue-500 h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+                <p id="progressDetail" class="text-slate-500 text-xs mt-2">Đang chờ worker xử lý...</p>
+                <p class="text-slate-600 text-xs mt-1">Vui lòng không đóng trình duyệt</p>
+            </div>
+
+            <!-- Hoàn tất -->
+            <div id="finishUI" class="hidden">
+                <div class="bg-slate-700/50 border border-emerald-500/30 p-8 rounded-2xl shadow-inner">
+                    <div class="text-5xl mb-4">✅</div>
+                    <p class="text-emerald-400 font-bold text-2xl mb-2">Hoàn tất!</p>
+                    <p id="finishDetail" class="text-slate-400 text-sm mb-8">Các file đã được nén ZIP an toàn.</p>
+
+                    <div class="flex flex-col gap-3">
+                        <a id="zipBtn" href="#" class="bg-emerald-500 text-slate-950 px-8 py-4 rounded-xl font-bold hover:bg-emerald-400 transition-colors shadow-lg shadow-emerald-900/20 text-center">
+                            📥 TẢI XUỐNG KẾT QUẢ (.ZIP)
+                        </a>
+                        <button onclick="resetApp()" class="mt-4 border border-slate-600 hover:border-slate-400 hover:bg-slate-700 text-slate-300 px-8 py-3 rounded-xl font-medium transition-all text-sm">
+                            🔄 Tiếp tục chuyển đổi file khác
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lỗi -->
+            <div id="errorUI" class="hidden">
+                <div class="bg-slate-700/50 border border-red-500/30 p-8 rounded-2xl">
+                    <div class="text-5xl mb-4">❌</div>
+                    <p class="text-red-400 font-bold text-xl mb-2">Có lỗi xảy ra</p>
+                    <p id="errorMsg" class="text-slate-400 text-sm mb-6"></p>
+                    <button onclick="resetApp()" class="border border-slate-600 hover:bg-slate-700 text-slate-300 px-8 py-3 rounded-xl font-medium transition-all text-sm">
+                        🔄 Thử lại
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const fileInput       = document.getElementById('fileInput');
+        const fileCountText   = document.getElementById('fileCount');
+        const uploadSection   = document.getElementById('uploadSection');
+        const statusSection   = document.getElementById('statusSection');
+        const loadingUI       = document.getElementById('loadingUI');
+        const finishUI        = document.getElementById('finishUI');
+        const errorUI         = document.getElementById('errorUI');
+        const zipBtn          = document.getElementById('zipBtn');
+        const progressBar     = document.getElementById('progressBar');
+        const progressText    = document.getElementById('progressText');
+        const progressDetail  = document.getElementById('progressDetail');
+        const finishDetail    = document.getElementById('finishDetail');
+        const errorMsg        = document.getElementById('errorMsg');
+
+        let pollTimer = null;
+
+        // ── Khi chọn file ──
+        fileInput.addEventListener('change', () => {
+            const count = fileInput.files.length;
+            fileCountText.innerText = count > 0 ? `Đã chọn ${count} file` : 'Chọn các file Excel (.xlsx)';
+            fileCountText.classList.toggle('text-blue-400', count > 0);
+        });
+
+        // ── Bắt đầu upload ──
+        async function startProcess() {
+            if (fileInput.files.length === 0) return alert('Vui lòng chọn ít nhất 1 file Excel!');
+
+            const fd = new FormData();
+            for (let f of fileInput.files) fd.append('excelFiles', f);
+
+            showSection('status');
+
+            try {
+                const res = await fetch('/upload', { method: 'POST', body: fd });
+                if (!res.ok) throw new Error('Server gặp sự cố khi nhận file.');
+
+                const data = await res.json();
+
+                if (data.status === 'queued' && data.requestId) {
+                    // Hệ thống mới: poll status
+                    pollStatus(data.requestId, data.total);
+                } else if (data.zipUrl) {
+                    // Hệ thống cũ (fallback): trả về zipUrl luôn
+                    showFinish(data.zipUrl, 0);
+                } else {
+                    throw new Error('Phản hồi không hợp lệ từ server.');
+                }
+            } catch (err) {
+                showError(err.message);
+            }
+        }
+
+        // ── Poll /status/:requestId mỗi 2 giây ──
+        function pollStatus(requestId, total) {
+            updateProgress(0, total, 0);
+
+            pollTimer = setInterval(async () => {
+                try {
+                    const res = await fetch(`/status/${requestId}`);
+                    if (!res.ok) throw new Error('Không thể kiểm tra trạng thái.');
+
+                    const data = await res.json();
+                    console.log(`Status: ${data.status} | Percent: ${data.percent || 0}% | Done: ${data.done || 0}/${total}|data.zipUrl: ${data.zipUrl || 'N/A'}|Failed: ${data.failed || 0}`);
+
+                    if (data.status === 'processing') {
+                        updateProgress(data.percent || 0, data.total, data.done);
+                    }
+
+                    if (data.status === 'done') {
+                        clearInterval(pollTimer);
+                        showFinish(data.zipUrl, data.failed);
+                    }
+
+                    if (data.status === 'error') {
+                        clearInterval(pollTimer);
+                        showError(data.message || 'Lỗi không xác định.');
+                    }
+
+                } catch (err) {
+                    clearInterval(pollTimer);
+                    showError(err.message);
+                }
+            }, 2000);
+        }
+
+        // ── Cập nhật progress bar ──
+        function updateProgress(percent, total, done) {
+            progressBar.style.width = percent + '%';
+            progressText.innerText = percent + '%';
+            progressDetail.innerText = `Đã xong ${done} / ${total} file`;
+        }
+
+        // ── Hiện màn hình hoàn tất ──
+        function showFinish(zipUrl, failedCount) {
+            loadingUI.classList.add('hidden');
+            finishUI.classList.remove('hidden');
+            zipBtn.href = zipUrl;
+
+            if (failedCount > 0) {
+                finishDetail.innerText = `Hoàn tất! (${failedCount} file bị lỗi, không có trong ZIP)`;
+                finishDetail.classList.add('text-yellow-400');
+            } else {
+                finishDetail.innerText = 'Tất cả file đã được nén ZIP an toàn.';
+            }
+        }
+
+        // ── Hiện màn hình lỗi ──
+        function showError(message) {
+            loadingUI.classList.add('hidden');
+            errorUI.classList.remove('hidden');
+            errorMsg.innerText = message;
+        }
+
+        // ── Chuyển section ──
+        function showSection(name) {
+            uploadSection.classList.toggle('hidden', name !== 'upload');
+            statusSection.classList.toggle('hidden', name !== 'status');
+            loadingUI.classList.remove('hidden');
+            finishUI.classList.add('hidden');
+            errorUI.classList.add('hidden');
+        }
+
+        // ── Reset về ban đầu ──
+        function resetApp() {
+            clearInterval(pollTimer);
+            fileInput.value = '';
+            fileCountText.innerText = 'Chọn các file Excel (.xlsx)';
+            fileCountText.classList.remove('text-blue-400');
+            progressBar.style.width = '0%';
+            progressText.innerText = '0%';
+            progressDetail.innerText = '';
+            finishDetail.classList.remove('text-yellow-400');
+            showSection('upload');
+        }
+    </script>
+</body>
+</html>
