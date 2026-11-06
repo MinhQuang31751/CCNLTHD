@@ -1,0 +1,22 @@
+# 04/11/2026 23:45:12 +07 | v24.22.2 | v=7.0.15 | LibreOffice 24.2.7.2 | Ubuntu 24.04.5 LTS, 2 vCPU
+# SIGTERM worker khi đang xử lý
+[23:45:16.058] $ curl -F "excelFiles=@Nhật ký bán hàng cả năm.xlsx" http://localhost:3000/upload
+[23:45:16.102] POST /upload -> {"status":"queued","requestId":"112a67f7-0270-4275-88a4-cb88481e83ef","total":1,"statusUrl":"/status/112a67f7-0270-4275-88a4-cb88481e83ef"}
+[23:45:16.652] $ kill -TERM 14446
+[23:45:19.331] worker đã thoát
+--- log worker
+[23:45:14 4/11/2026] Worker Service đang chạy | Concurrency: 1 | Redis: 127.0.0.1:6379
+[23:45:16 4/11/2026] [REQ:112a67f7-0270-4275-88a4-cb88481e83ef] START (lần 1): Nhật ký bán hàng cả năm.xlsx
+[23:45:16 4/11/2026] Nhận SIGTERM, đang đóng worker...
+[23:45:19 4/11/2026] [REQ:112a67f7-0270-4275-88a4-cb88481e83ef] DONE: Nhat_ky_ban_hang_ca_nam.pdf
+[23:45:19 4/11/2026] Đã đóng worker.
+$ curl /status/<id>
+{"status":"processing","requestId":"112a67f7-0270-4275-88a4-cb88481e83ef","total":1,"done":1,"failed":0,"percent":100}
+[23:45:19.352] khởi động lại worker
+[23:45:20.871] {"status":"done","requestId":"112a67f7-0270-4275-88a4-cb88481e83ef","total":1,"done":1,"failed":0,"failedFiles":[],"zipUrl":"/download/112a67f7-0270-4275-88a4-cb88481e83ef"}
+--- log worker mới
+[23:45:19 4/11/2026] Worker Service đang chạy | Concurrency: 1 | Redis: 127.0.0.1:6379
+[23:45:19 4/11/2026] [REQ:112a67f7-0270-4275-88a4-cb88481e83ef] ZIP: 1 PDF, 0 file lỗi
+$ ls uploads/ output/
+uploads: 0 file
+output: 112a67f7-0270-4275-88a4-cb88481e83ef.zip 

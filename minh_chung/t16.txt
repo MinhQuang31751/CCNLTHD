@@ -1,0 +1,22 @@
+# 04/11/2026 23:45:41 +07 | v24.22.2 | v=7.0.15 | LibreOffice 24.2.7.2 | Ubuntu 24.04.5 LTS, 2 vCPU
+# Redis dừng khi API đang chạy
+[23:45:44.997] $ redis-cli shutdown nosave
+[23:45:45.522] $ curl --max-time 15 -F excelFiles=@Báo cáo doanh thu Q3.xlsx http://localhost:3000/upload
+{"status":"error","code":"QUEUE_UNAVAILABLE","message":"Hàng đợi tạm thời không dùng được, vui lòng thử lại sau.","traceId":"65197258"}
+HTTP 503 | 0.043200s
+curl exit=0
+$ curl http://localhost:3000/status/6f1c2a9e-3b7d-4c11-9a0e-2d5f8b7c4e10
+{"status":"error","code":"QUEUE_UNAVAILABLE","message":"Hàng đợi tạm thời không dùng được, vui lòng thử lại sau.","traceId":"3e32f376"}
+HTTP 503 | 0.005949s
+$ ls uploads/ output/
+uploads: 0 file
+output: 
+--- log API (trích)
+{"traceId":"65197258","level":"error","code":"QUEUE_UNAVAILABLE","error":"Error: Stream isn't writeable and enableOfflineQueue options is false\n    at EventEmitter.sendCommand (/tmp/claude-0/-home-claude/60d20ac7-98d3-55d0-b899-f90ffd9f1e2d/scratchpad/final/a
+{"time":"2026-11-04T16:45:45.574Z","traceId":"65197258","method":"POST","url":"/upload","status":503,"ms":37}
+{"traceId":"3e32f376","level":"error","code":"QUEUE_UNAVAILABLE","error":"Error: Stream isn't writeable and enableOfflineQueue options is false\n    at EventEmitter.sendCommand (/tmp/claude-0/-home-claude/60d20ac7-98d3-55d0-b899-f90ffd9f1e2d/scratchpad/final/a
+{"time":"2026-11-04T16:45:45.586Z","traceId":"3e32f376","method":"GET","url":"/status/6f1c2a9e-3b7d-4c11-9a0e-2d5f8b7c4e10","status":503,"ms":5.4}
+[23:45:45.600] bật lại Redis
+$ curl -F excelFiles=@Báo cáo doanh thu Q3.xlsx http://localhost:3000/upload   (sau khi bật lại Redis)
+{"status":"queued","requestId":"ccb9a7f1-7bf0-4d4d-a2ec-d0e92c5bff34","total":1,"statusUrl":"/status/ccb9a7f1-7bf0-4d4d-a2ec-d0e92c5bff34"}
+HTTP 202 | 0.010715s

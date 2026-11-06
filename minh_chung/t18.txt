@@ -1,0 +1,25 @@
+# 04/11/2026 23:45:52 +07 | v24.22.2 | v=7.0.15 | LibreOffice 24.2.7.2 | Ubuntu 24.04.5 LTS, 2 vCPU
+# RESULT_TTL_SECONDS=20, SWEEP_INTERVAL_SECONDS=5
+[23:45:55.391] $ curl -F "excelFiles=@Báo cáo doanh thu Q3.xlsx" http://localhost:3000/upload
+[23:45:57.559] {"status":"done","requestId":"e4a4a61d-7bea-46bc-af3a-1aded1c860c1","total":1,"done":1,"failed":0,"failedFiles":[],"zipUrl":"/download/e4a4a61d-7bea-46bc-af3a-1aded1c860c1"}
+[23:45:57.565] GET /download/<id> -> HTTP 200
+$ ls uploads/ output/
+uploads: 0 file
+output: e4a4a61d-7bea-46bc-af3a-1aded1c860c1.zip 
+[23:46:27.593] (30 giây sau, chưa có request nào khác)
+{"status":"error","code":"EXPIRED","message":"File kết quả đã hết hạn và bị xóa.","traceId":"cd1c4595"}
+[23:46:27.596] GET /download/<id> -> HTTP 410
+{"status":"done","requestId":"e4a4a61d-7bea-46bc-af3a-1aded1c860c1","total":1,"done":1,"failed":0,"failedFiles":[],"zipUrl":"/download/e4a4a61d-7bea-46bc-af3a-1aded1c860c1"}
+[23:46:27.610] GET /status/<id> -> HTTP 200
+$ ls uploads/ output/
+uploads: 0 file
+output: 
+[23:46:27.634] upload một request khác và đợi nó xong
+[23:46:27.637] $ curl -F "excelFiles=@Danh sách lớp DCT01.xlsx" http://localhost:3000/upload
+[23:46:29.756] {"status":"done","requestId":"50130df8-4797-4c50-8cc7-8fbdc4574c2a","total":1,"done":1,"failed":0,"failedFiles":[],"zipUrl":"/download/50130df8-4797-4c50-8cc7-8fbdc4574c2a"}
+{"status":"error","code":"REQUEST_NOT_FOUND","message":"Request không tồn tại hoặc đã hết hạn.","traceId":"9cb9a781"}
+[23:46:29.762] GET /status/<id cũ> -> HTTP 404
+--- log worker
+[23:45:56 4/11/2026] [REQ:e4a4a61d-7bea-46bc-af3a-1aded1c860c1] ZIP: 1 PDF, 0 file lỗi
+[23:46:19 4/11/2026] SWEEP: output/e4a4a61d-7bea-46bc-af3a-1aded1c860c1.zip
+[23:46:29 4/11/2026] [REQ:50130df8-4797-4c50-8cc7-8fbdc4574c2a] ZIP: 1 PDF, 0 file lỗi

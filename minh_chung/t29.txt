@@ -1,0 +1,15 @@
+# 04/11/2026 23:47:58 +07 | v24.22.2 | v=7.0.15 | LibreOffice 24.2.7.2 | Ubuntu 24.04.5 LTS, 2 vCPU
+# API khởi động khi Redis chưa chạy
+[23:47:59.998] $ node server.js   (Redis đang tắt)
+[23:48:03.004] $ curl http://localhost:3000/   -> 000   (000: chưa có tiến trình nào nghe cổng 3000)
+[23:48:03.013] bật Redis
+[23:48:03.535] $ curl http://localhost:3000/   -> 200
+--- log API
+[REDIS] connect ECONNREFUSED 127.0.0.1:6379
+[REDIS] connect ECONNREFUSED 127.0.0.1:6379
+[REDIS] connect ECONNREFUSED 127.0.0.1:6379
+[REDIS] connect ECONNREFUSED 127.0.0.1:6379
+[REDIS] connect ECONNREFUSED 127.0.0.1:6379
+[REDIS] connect ECONNREFUSED 127.0.0.1:6379
+API Server tại: http://localhost:3000
+{"time":"2026-11-04T16:48:03.549Z","traceId":"bc15b135","method":"GET","url":"/","status":200,"ms":6.2}

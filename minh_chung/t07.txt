@@ -1,0 +1,7 @@
+# 04/11/2026 23:43:15 +07 | v24.22.2 | v=7.0.15 | LibreOffice 24.2.7.2 | Ubuntu 24.04.5 LTS, 2 vCPU
+$ curl -F excelFiles=@Ton_kho_01.xlsx … (51 file) http://localhost:3000/upload
+{"status":"error","code":"TOO_MANY_FILES","message":"Vượt quá số file cho phép trong một lần gửi.","traceId":"eaf7b920"}
+HTTP 400 | application/json; charset=utf-8
+$ ls uploads/ output/
+uploads: 0 file
+output: 

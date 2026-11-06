@@ -1,0 +1,12 @@
+# 04/11/2026 23:43:29 +07 | v24.22.2 | v=7.0.15 | LibreOffice 24.2.7.2 | Ubuntu 24.04.5 LTS, 2 vCPU
+# 4 file: hai cặp trùng tên sau khi chuẩn hóa
+[23:43:32.604] $ curl -F "excelFiles=@Báo cáo doanh thu Q3.xlsx" -F "excelFiles=@Bao cao doanh thu Q3.xlsx" -F "excelFiles=@v1.2.xlsx" -F "excelFiles=@v1.3.xlsx" http://localhost:3000/upload
+{"status":"queued","requestId":"dc0f9952-4e01-46dd-9ed4-56280af0e272","total":4,"statusUrl":"/status/dc0f9952-4e01-46dd-9ed4-56280af0e272"}
+[23:43:36.863] {"status":"done","requestId":"dc0f9952-4e01-46dd-9ed4-56280af0e272","total":4,"done":4,"failed":0,"failedFiles":[],"zipUrl":"/download/dc0f9952-4e01-46dd-9ed4-56280af0e272"}
+$ unzip -l ket_qua.zip
+    24663  2026-11-04 23:43   Bao_cao_doanh_thu_Q3_2.pdf
+    24707  2026-11-04 23:43   Bao_cao_doanh_thu_Q3.pdf
+    28671  2026-11-04 23:43   v1_2.pdf
+    29305  2026-11-04 23:43   v1_3.pdf
+---------                     -------
+   107346                     4 files

@@ -1,0 +1,26 @@
+# 04/11/2026 23:47:36 +07 | v24.22.2 | v=7.0.15 | LibreOffice 24.2.7.2 | Ubuntu 24.04.5 LTS, 2 vCPU
+# UPLOAD_RATE_LIMIT=3 (mặc định 10 lần/15 phút/IP), không chạy worker
+$ curl -F excelFiles=@Báo cáo doanh thu Q3.xlsx http://localhost:3000/upload   (lần 1)
+{"status":"queued","requestId":"f190faa3-6ced-4712-be63-3e5c98a8a052","total":1,"statusUrl":"/status/f190faa3-6ced-4712-be63-3e5c98a8a052"}
+HTTP 202
+$ curl -F excelFiles=@Báo cáo doanh thu Q3.xlsx http://localhost:3000/upload   (lần 2)
+{"status":"queued","requestId":"f92e3f3c-cc88-43ab-b0f1-38c29137813d","total":1,"statusUrl":"/status/f92e3f3c-cc88-43ab-b0f1-38c29137813d"}
+HTTP 202
+$ curl -F excelFiles=@Báo cáo doanh thu Q3.xlsx http://localhost:3000/upload   (lần 3)
+{"status":"queued","requestId":"8faa6edc-fce1-402a-82cb-fa50dbc1d2fc","total":1,"statusUrl":"/status/8faa6edc-fce1-402a-82cb-fa50dbc1d2fc"}
+HTTP 202
+$ curl -F excelFiles=@Báo cáo doanh thu Q3.xlsx http://localhost:3000/upload   (lần 4)
+{"status":"error","code":"TOO_MANY_REQUESTS","message":"Bạn đã tải lên quá nhiều lần, vui lòng thử lại sau.","traceId":"49ea9d29"}
+HTTP 429
+--- header của lần 4
+RateLimit: "3-in-15min"; r=0; t=900
+RateLimit-Policy: "3-in-15min"; q=3; w=900; pk=:MTJjYTE3YjQ5YWYy:
+Retry-After: 900
+$ ls uploads/ output/
+uploads: 3 file
+output: 
+--- log API
+{"time":"2026-11-04T16:47:38.444Z","traceId":"a0b2ab1c","method":"POST","url":"/upload","status":202,"ms":35.5}
+{"time":"2026-11-04T16:47:38.457Z","traceId":"4c6d1f19","method":"POST","url":"/upload","status":202,"ms":5.2}
+{"time":"2026-11-04T16:47:38.469Z","traceId":"74f397a8","method":"POST","url":"/upload","status":202,"ms":3.9}
+{"time":"2026-11-04T16:47:38.478Z","traceId":"49ea9d29","method":"POST","url":"/upload","status":429,"ms":1.2}

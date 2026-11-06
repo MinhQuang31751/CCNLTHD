@@ -25,7 +25,7 @@
                 <span class="text-slate-500 text-sm mt-2 block">Kéo thả hoặc nhấn vào đây</span>
             </label>
 
-            <button onclick="startProcess()" class="w-full bg-blue-600 hover:bg-blue-500 py-4 rounded-xl font-bold shadow-lg shadow-blue-900/20 transition active:scale-95 text-lg">
+            <button id="startBtn" class="w-full bg-blue-600 hover:bg-blue-500 py-4 rounded-xl font-bold shadow-lg shadow-blue-900/20 transition active:scale-95 text-lg">
                 BẮT ĐẦU CHUYỂN ĐỔI
             </button>
         </div>
@@ -58,7 +58,7 @@
                         <a id="zipBtn" href="#" class="bg-emerald-500 text-slate-950 px-8 py-4 rounded-xl font-bold hover:bg-emerald-400 transition-colors shadow-lg shadow-emerald-900/20 text-center">
                             📥 TẢI XUỐNG KẾT QUẢ (.ZIP)
                         </a>
-                        <button onclick="resetApp()" class="mt-4 border border-slate-600 hover:border-slate-400 hover:bg-slate-700 text-slate-300 px-8 py-3 rounded-xl font-medium transition-all text-sm">
+                        <button data-action="reset" class="mt-4 border border-slate-600 hover:border-slate-400 hover:bg-slate-700 text-slate-300 px-8 py-3 rounded-xl font-medium transition-all text-sm">
                             🔄 Tiếp tục chuyển đổi file khác
                         </button>
                     </div>
@@ -71,7 +71,7 @@
                     <div class="text-5xl mb-4">❌</div>
                     <p class="text-red-400 font-bold text-xl mb-2">Có lỗi xảy ra</p>
                     <p id="errorMsg" class="text-slate-400 text-sm mb-6"></p>
-                    <button onclick="resetApp()" class="border border-slate-600 hover:bg-slate-700 text-slate-300 px-8 py-3 rounded-xl font-medium transition-all text-sm">
+                    <button data-action="reset" class="border border-slate-600 hover:bg-slate-700 text-slate-300 px-8 py-3 rounded-xl font-medium transition-all text-sm">
                         🔄 Thử lại
                     </button>
                 </div>
@@ -80,141 +80,6 @@
         </div>
     </div>
 
-    <script>
-        const fileInput       = document.getElementById('fileInput');
-        const fileCountText   = document.getElementById('fileCount');
-        const uploadSection   = document.getElementById('uploadSection');
-        const statusSection   = document.getElementById('statusSection');
-        const loadingUI       = document.getElementById('loadingUI');
-        const finishUI        = document.getElementById('finishUI');
-        const errorUI         = document.getElementById('errorUI');
-        const zipBtn          = document.getElementById('zipBtn');
-        const progressBar     = document.getElementById('progressBar');
-        const progressText    = document.getElementById('progressText');
-        const progressDetail  = document.getElementById('progressDetail');
-        const finishDetail    = document.getElementById('finishDetail');
-        const errorMsg        = document.getElementById('errorMsg');
-
-        let pollTimer = null;
-
-        // ── Khi chọn file ──
-        fileInput.addEventListener('change', () => {
-            const count = fileInput.files.length;
-            fileCountText.innerText = count > 0 ? `Đã chọn ${count} file` : 'Chọn các file Excel (.xlsx)';
-            fileCountText.classList.toggle('text-blue-400', count > 0);
-        });
-
-        // ── Bắt đầu upload ──
-        async function startProcess() {
-            if (fileInput.files.length === 0) return alert('Vui lòng chọn ít nhất 1 file Excel!');
-
-            const fd = new FormData();
-            for (let f of fileInput.files) fd.append('excelFiles', f);
-
-            showSection('status');
-
-            try {
-                const res = await fetch('/upload', { method: 'POST', body: fd });
-                if (!res.ok) throw new Error('Server gặp sự cố khi nhận file.');
-
-                const data = await res.json();
-
-                if (data.status === 'queued' && data.requestId) {
-                    // Hệ thống mới: poll status
-                    pollStatus(data.requestId, data.total);
-                } else if (data.zipUrl) {
-                    // Hệ thống cũ (fallback): trả về zipUrl luôn
-                    showFinish(data.zipUrl, 0);
-                } else {
-                    throw new Error('Phản hồi không hợp lệ từ server.');
-                }
-            } catch (err) {
-                showError(err.message);
-            }
-        }
-
-        // ── Poll /status/:requestId mỗi 2 giây ──
-        function pollStatus(requestId, total) {
-            updateProgress(0, total, 0);
-
-            pollTimer = setInterval(async () => {
-                try {
-                    const res = await fetch(`/status/${requestId}`);
-                    if (!res.ok) throw new Error('Không thể kiểm tra trạng thái.');
-
-                    const data = await res.json();
-                    console.log(`Status: ${data.status} | Percent: ${data.percent || 0}% | Done: ${data.done || 0}/${total}|data.zipUrl: ${data.zipUrl || 'N/A'}|Failed: ${data.failed || 0}`);
-
-                    if (data.status === 'processing') {
-                        updateProgress(data.percent || 0, data.total, data.done);
-                    }
-
-                    if (data.status === 'done') {
-                        clearInterval(pollTimer);
-                        showFinish(data.zipUrl, data.failed);
-                    }
-
-                    if (data.status === 'error') {
-                        clearInterval(pollTimer);
-                        showError(data.message || 'Lỗi không xác định.');
-                    }
-
-                } catch (err) {
-                    clearInterval(pollTimer);
-                    showError(err.message);
-                }
-            }, 2000);
-        }
-
-        // ── Cập nhật progress bar ──
-        function updateProgress(percent, total, done) {
-            progressBar.style.width = percent + '%';
-            progressText.innerText = percent + '%';
-            progressDetail.innerText = `Đã xong ${done} / ${total} file`;
-        }
-
-        // ── Hiện màn hình hoàn tất ──
-        function showFinish(zipUrl, failedCount) {
-            loadingUI.classList.add('hidden');
-            finishUI.classList.remove('hidden');
-            zipBtn.href = zipUrl;
-
-            if (failedCount > 0) {
-                finishDetail.innerText = `Hoàn tất! (${failedCount} file bị lỗi, không có trong ZIP)`;
-                finishDetail.classList.add('text-yellow-400');
-            } else {
-                finishDetail.innerText = 'Tất cả file đã được nén ZIP an toàn.';
-            }
-        }
-
-        // ── Hiện màn hình lỗi ──
-        function showError(message) {
-            loadingUI.classList.add('hidden');
-            errorUI.classList.remove('hidden');
-            errorMsg.innerText = message;
-        }
-
-        // ── Chuyển section ──
-        function showSection(name) {
-            uploadSection.classList.toggle('hidden', name !== 'upload');
-            statusSection.classList.toggle('hidden', name !== 'status');
-            loadingUI.classList.remove('hidden');
-            finishUI.classList.add('hidden');
-            errorUI.classList.add('hidden');
-        }
-
-        // ── Reset về ban đầu ──
-        function resetApp() {
-            clearInterval(pollTimer);
-            fileInput.value = '';
-            fileCountText.innerText = 'Chọn các file Excel (.xlsx)';
-            fileCountText.classList.remove('text-blue-400');
-            progressBar.style.width = '0%';
-            progressText.innerText = '0%';
-            progressDetail.innerText = '';
-            finishDetail.classList.remove('text-yellow-400');
-            showSection('upload');
-        }
-    </script>
+    <script src="/app.js"></script>
 </body>
 </html>

@@ -1,0 +1,17 @@
+# 04/11/2026 23:43:08 +07 | v24.22.2 | v=7.0.15 | LibreOffice 24.2.7.2 | Ubuntu 24.04.5 LTS, 2 vCPU
+# 1 file Excel thật + ghi_chu.txt (sai đuôi)
+[23:43:11.975] $ curl -F "excelFiles=@Báo cáo doanh thu Q3.xlsx" -F "excelFiles=@ghi_chu.txt" http://localhost:3000/upload
+{"status":"error","code":"INVALID_FILE_TYPE","message":"Chỉ nhận file .xlsx: \"ghi_chu.txt\"","traceId":"463cedea"}
+HTTP 400 | 0.022835s
+$ ls uploads/ output/
+uploads: 0 file
+output: 
+# 1 file Excel thật + file_hong.xlsx (văn bản đổi đuôi thành .xlsx)
+[23:43:12.020] $ curl -F "excelFiles=@Báo cáo doanh thu Q3.xlsx" -F "excelFiles=@file_hong.xlsx" http://localhost:3000/upload
+{"status":"error","code":"INVALID_FILE_CONTENT","message":"Nội dung file không phải .xlsx.","details":{"files":["file_hong.xlsx"]},"traceId":"3b07052e"}
+HTTP 400 | 0.006053s
+$ ls uploads/ output/
+uploads: 0 file
+output: 
+$ head -c 40 file_hong.xlsx
+Day khong phai file Excel, chi la van ba

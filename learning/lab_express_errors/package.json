@@ -1,0 +1,14 @@
+{
+  "name": "lab-express-errors",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "starter": "node starter.js",
+    "solution": "node solution.js",
+    "check": "node check.mjs"
+  },
+  "dependencies": {
+    "express": "5.2.1",
+    "zod": "4.6.7"
+  }
+}

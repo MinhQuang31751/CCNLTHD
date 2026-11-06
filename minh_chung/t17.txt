@@ -1,0 +1,11 @@
+# 04/11/2026 23:45:49 +07 | v24.22.2 | v=7.0.15 | LibreOffice 24.2.7.2 | Ubuntu 24.04.5 LTS, 2 vCPU
+$ redis-cli config set maxmemory 1   (Redis từ chối mọi lệnh ghi)
+OK
+$ curl -F excelFiles=@Báo cáo doanh thu Q3.xlsx http://localhost:3000/upload
+{"status":"error","code":"QUEUE_UNAVAILABLE","message":"Hàng đợi tạm thời không dùng được, vui lòng thử lại sau.","traceId":"0b76b0df"}
+HTTP 503 | 0.038726s
+$ ls uploads/ output/
+uploads: 0 file
+output: 
+--- log API (dòng lỗi)
+{"traceId":"0b76b0df","level":"error","code":"QUEUE_UNAVAILABLE","error":"ReplyError: EXECABORT Transaction discarded because of previous errors.\n    at parseError (/tmp/claude-0/-home-claude/60d20ac7-98d3-55d0-b899-f90ffd9f1e2d/scratchpad/final/app/node_modules/redis-parser/lib/parser.js:179:12)\n

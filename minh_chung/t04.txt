@@ -1,0 +1,4 @@
+# 04/11/2026 23:43:05 +07 | v24.22.2 | v=7.0.15 | LibreOffice 24.2.7.2 | Ubuntu 24.04.5 LTS, 2 vCPU
+$ curl -X POST http://localhost:3000/upload   (không kèm file)
+{"status":"error","code":"NO_FILES","message":"Không có file.","traceId":"789404f5"}
+HTTP 400 | application/json; charset=utf-8

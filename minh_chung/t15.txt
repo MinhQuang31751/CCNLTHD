@@ -1,0 +1,13 @@
+# 04/11/2026 23:57:18 +07 | v24.22.2 | v=7.0.15 | LibreOffice 24.2.7.2 | Ubuntu 24.04.5 LTS, 2 vCPU
+# 10 file nhật ký, mỗi file 12.000 dòng; khởi động lại API khi request đang chạy
+[23:57:21.453] $ curl -F "excelFiles=@Nhat_ky_01.xlsx" -F "excelFiles=@Nhat_ky_02.xlsx" -F "excelFiles=@Nhat_ky_03.xlsx" -F "excelFiles=@Nhat_ky_04.xlsx" -F "excelFiles=@Nhat_ky_05.xlsx" -F "excelFiles=@Nhat_ky_06.xlsx" -F "excelFiles=@Nhat_ky_07.xlsx" -F "excelFiles=@Nhat_ky_08.xlsx" -F "excelFiles=@Nhat_ky_09.xlsx" -F "excelFiles=@Nhat_ky_10.xlsx" http://localhost:3000/upload
+[23:57:21.544] POST /upload -> {"status":"queued","requestId":"48f98af4-bb68-471e-9ed5-0ea09c3905b5","total":10,"statusUrl":"/status/48f98af4-bb68-471e-9ed5-0ea09c3905b5"}
+[23:57:24.632] {"status":"processing","requestId":"48f98af4-bb68-471e-9ed5-0ea09c3905b5","total":10,"done":0,"failed":0,"percent":0}
+[23:57:25.651] $ kill API (SIGTERM); node server.js
+[23:57:26.163] API đã dừng: 000
+[23:57:26.844] API đã chạy lại
+[23:57:26.911] {"status":"processing","requestId":"48f98af4-bb68-471e-9ed5-0ea09c3905b5","total":10,"done":2,"failed":0,"percent":20}
+[23:57:39.025] {"status":"done","requestId":"48f98af4-bb68-471e-9ed5-0ea09c3905b5","total":10,"done":10,"failed":0,"failedFiles":[],"zipUrl":"/download/48f98af4-bb68-471e-9ed5-0ea09c3905b5"}
+$ ls uploads/ output/
+uploads: 0 file
+output: 48f98af4-bb68-471e-9ed5-0ea09c3905b5.zip 

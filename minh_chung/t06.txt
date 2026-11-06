@@ -1,0 +1,7 @@
+# 04/11/2026 23:43:12 +07 | v24.22.2 | v=7.0.15 | LibreOffice 24.2.7.2 | Ubuntu 24.04.5 LTS, 2 vCPU
+$ curl -F files=@Ton_kho_01.xlsx http://localhost:3000/upload   (sai tên trường)
+{"status":"error","code":"UNEXPECTED_FIELD","message":"Sai tên trường file (phải là excelFiles) hoặc quá số file.","traceId":"2bab4d91"}
+HTTP 400
+$ ls uploads/ output/
+uploads: 0 file
+output: 

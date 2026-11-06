@@ -1,0 +1,18 @@
+# 04/11/2026 23:58:43 +07 | v24.22.2 | v=7.0.15 | LibreOffice 24.2.7.2 | Ubuntu 24.04.5 LTS, 2 vCPU
+# Giao diện dưới CSP: Chromium (Playwright) mở trang, chọn 2 file, bấm nút, chờ màn hình hoàn tất
+GET / -> 200
+script đã tải: https://cdn.tailwindcss.com/, http://localhost:3000/app.js
+sau khi chọn file: "Đã chọn 2 file"
+màn hình hoàn tất sau 2.5 s: "Tất cả file đã được nén ZIP an toàn."
+nút tải: href=/download/cf0f206c-4c4c-43c1-8b9e-71dfa66b4228
+tải ZIP từ trang: 200 application/zip 56693 B
+bấm "Tiếp tục": khung upload hiện lại
+vi phạm CSP: không có
+lỗi console: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED
+--- log API
+API Server tại: http://localhost:3000
+{"time":"2026-11-04T16:58:47.764Z","traceId":"9e04bf05","method":"GET","url":"/","status":200,"ms":7}
+{"time":"2026-11-04T16:58:47.826Z","traceId":"cba19d2a","method":"GET","url":"/app.js","status":200,"ms":2.8}
+{"time":"2026-11-04T16:58:48.271Z","traceId":"bda02e9c","method":"POST","url":"/upload","status":202,"ms":29.5}
+{"time":"2026-11-04T16:58:50.282Z","traceId":"e1275423","method":"GET","url":"/status/cf0f206c-4c4c-43c1-8b9e-71dfa66b4228","status":200,"ms":5.3}
+{"time":"2026-11-04T16:58:50.670Z","traceId":"46449713","method":"GET","url":"/download/cf0f206c-4c4c-43c1-8b9e-71dfa66b4228","status":200,"ms":5.6}

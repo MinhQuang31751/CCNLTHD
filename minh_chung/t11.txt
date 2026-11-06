@@ -1,0 +1,33 @@
+# 04/11/2026 23:43:36 +07 | v24.22.2 | v=7.0.15 | LibreOffice 24.2.7.2 | Ubuntu 24.04.5 LTS, 2 vCPU
+# 1 file Excel hỏng (3.000 byte đầu của một file thật, qua được kiểm tra chữ ký) + 2 file tốt
+[23:43:39.936] $ curl -F "excelFiles=@Bao_cao_bi_hong.xlsx" -F "excelFiles=@Báo cáo doanh thu Q3.xlsx" -F "excelFiles=@v1.2.xlsx" http://localhost:3000/upload
+{"status":"queued","requestId":"1b581692-6dfa-480a-9b0a-d91258ff794d","total":3,"statusUrl":"/status/1b581692-6dfa-480a-9b0a-d91258ff794d"}
+[23:43:50.188] {"status":"processing","requestId":"1b581692-6dfa-480a-9b0a-d91258ff794d","total":3,"done":2,"failed":0,"percent":67}
+[23:43:52.208] {"status":"done","requestId":"1b581692-6dfa-480a-9b0a-d91258ff794d","total":3,"done":2,"failed":1,"failedFiles":[{"file":"Bao_cao_bi_hong.xlsx","reason":"Error calling soffice: Error: source file could not be loaded\n"}],"zipUrl":"/download/1b581692-6dfa-480a-9b0a-d91258ff794d"}
+$ unzip -l ket_qua.zip
+    24707  2026-11-04 23:43   Bao_cao_doanh_thu_Q3.pdf
+    28671  2026-11-04 23:43   v1_2.pdf
+---------                     -------
+    53378                     2 files
+--- log worker
+[23:43:38 4/11/2026] Worker Service đang chạy | Concurrency: 2 | Redis: 127.0.0.1:6379
+[23:43:39 4/11/2026] [REQ:1b581692-6dfa-480a-9b0a-d91258ff794d] START (lần 1): Bao_cao_bi_hong.xlsx
+[23:43:39 4/11/2026] [REQ:1b581692-6dfa-480a-9b0a-d91258ff794d] START (lần 1): Báo cáo doanh thu Q3.xlsx
+[23:43:39 4/11/2026] Bỏ qua chỉnh khổ trang a50ba6a0dd4840dc4c26826cbb22987c: ADM-ZIP: Invalid or unsupported zip format. No END header found
+[23:43:41 4/11/2026] [REQ:1b581692-6dfa-480a-9b0a-d91258ff794d] DONE: Bao_cao_doanh_thu_Q3.pdf
+[23:43:41 4/11/2026] [REQ:1b581692-6dfa-480a-9b0a-d91258ff794d] START (lần 1): v1.2.xlsx
+[23:43:41 4/11/2026] Fail excel-convert 1b581692-6dfa-480a-9b0a-d91258ff794d-0 (lần 1): Error calling soffice: Error: source file could not be loaded
+
+[23:43:43 4/11/2026] [REQ:1b581692-6dfa-480a-9b0a-d91258ff794d] DONE: v1_2.pdf
+[23:43:43 4/11/2026] [REQ:1b581692-6dfa-480a-9b0a-d91258ff794d] START (lần 2): Bao_cao_bi_hong.xlsx
+[23:43:43 4/11/2026] Bỏ qua chỉnh khổ trang a50ba6a0dd4840dc4c26826cbb22987c: ADM-ZIP: Invalid or unsupported zip format. No END header found
+[23:43:45 4/11/2026] Fail excel-convert 1b581692-6dfa-480a-9b0a-d91258ff794d-0 (lần 2): Error calling soffice: Error: source file could not be loaded
+
+[23:43:49 4/11/2026] [REQ:1b581692-6dfa-480a-9b0a-d91258ff794d] START (lần 3): Bao_cao_bi_hong.xlsx
+[23:43:49 4/11/2026] Bỏ qua chỉnh khổ trang a50ba6a0dd4840dc4c26826cbb22987c: ADM-ZIP: Invalid or unsupported zip format. No END header found
+[23:43:50 4/11/2026] Fail excel-convert 1b581692-6dfa-480a-9b0a-d91258ff794d-0 (lần 3): Error calling soffice: Error: source file could not be loaded
+
+[23:43:50 4/11/2026] [REQ:1b581692-6dfa-480a-9b0a-d91258ff794d] ZIP: 2 PDF, 1 file lỗi
+$ ls uploads/ output/
+uploads: 0 file
+output: 1b581692-6dfa-480a-9b0a-d91258ff794d.zip 

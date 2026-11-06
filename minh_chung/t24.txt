@@ -1,0 +1,15 @@
+# 04/11/2026 23:47:38 +07 | v24.22.2 | v=7.0.15 | LibreOffice 24.2.7.2 | Ubuntu 24.04.5 LTS, 2 vCPU
+# CORS_ORIGINS để trống (mặc định)
+$ curl -H 'Origin: http://trang-la.example' http://localhost:3000/status/6f1c2a9e-3b7d-4c11-9a0e-2d5f8b7c4e10
+HTTP/1.1 404 Not Found
+(không có header Access-Control-Allow-Origin)
+# CORS_ORIGINS=http://frontend.example
+$ curl -X OPTIONS -H 'Origin: http://frontend.example' -H 'Access-Control-Request-Method: POST' http://localhost:3000/upload
+HTTP/1.1 204 No Content
+Access-Control-Allow-Origin: http://frontend.example
+Vary: Origin, Access-Control-Request-Headers
+Access-Control-Allow-Methods: GET,POST
+$ curl -X OPTIONS -H 'Origin: http://trang-la.example' -H 'Access-Control-Request-Method: POST' http://localhost:3000/upload
+HTTP/1.1 204 No Content
+Vary: Origin, Access-Control-Request-Headers
+Access-Control-Allow-Methods: GET,POST

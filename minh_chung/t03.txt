@@ -1,0 +1,10 @@
+# 04/11/2026 23:43:02 +07 | v24.22.2 | v=7.0.15 | LibreOffice 24.2.7.2 | Ubuntu 24.04.5 LTS, 2 vCPU
+$ curl http://localhost:3000/status/abc
+{"status":"error","code":"INVALID_REQUEST_ID","message":"requestId không hợp lệ.","details":["Invalid UUID"],"traceId":"6cf69c75"}
+HTTP 400
+$ curl http://localhost:3000/status/6f1c2a9e-3b7d-4c11-9a0e-2d5f8b7c4e10
+{"status":"error","code":"REQUEST_NOT_FOUND","message":"Request không tồn tại hoặc đã hết hạn.","traceId":"53f174b2"}
+HTTP 404
+$ curl http://localhost:3000/download/6f1c2a9e-3b7d-4c11-9a0e-2d5f8b7c4e10
+{"status":"error","code":"REQUEST_NOT_FOUND","message":"Request không tồn tại hoặc đã hết hạn.","traceId":"49d45130"}
+HTTP 404

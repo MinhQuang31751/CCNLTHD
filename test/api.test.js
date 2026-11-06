@@ -100,6 +100,13 @@ test('Mất Redis khi tạo request: 503 QUEUE_UNAVAILABLE, file đã nhận b�
     assert.equal(uploadsLeft(), 0);
 });
 
+test('Redis không trả lời quá thời hạn (Command timed out): 503 QUEUE_UNAVAILABLE', async () => {
+    const svc = fakeService({ getStatus: async () => { throw new Error('Command timed out'); } });
+    const res = await request(createApp(svc)).get(`/status/${ID}`);
+    assert.equal(res.status, 503);
+    assert.equal(res.body.code, 'QUEUE_UNAVAILABLE');
+});
+
 test('Redis từ chối ghi trong giao dịch MULTI (EXECABORT do OOM): 503', async () => {
     const svc = fakeService({
         createRequest: async () => {

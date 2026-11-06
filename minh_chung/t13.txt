@@ -1,0 +1,32 @@
+# 04/11/2026 23:44:02 +07 | v24.22.2 | v=7.0.15 | LibreOffice 24.2.7.2 | Ubuntu 24.04.5 LTS, 2 vCPU
+# kill -9 worker A khi đang xử lý; worker B nhận lại job
+[23:44:05.559] $ curl -F "excelFiles=@Nhật ký bán hàng cả năm.xlsx" http://localhost:3000/upload
+[23:44:05.611] POST /upload -> {"status":"queued","requestId":"797ccae2-5465-48c2-9023-e9617b97d315","total":1,"statusUrl":"/status/797ccae2-5465-48c2-9023-e9617b97d315"}
+[23:44:07.678] worker B đã chạy
+[23:44:07.681] $ kill -9 14132   (worker A đang xử lý)
+final_cases.sh: line 67: 14132 Killed                  ( cd $APP && exec env "$@" node worker-service.js > $LOGS/$name.log 2>&1 )
+[23:44:07.709] {"status":"processing","requestId":"797ccae2-5465-48c2-9023-e9617b97d315","total":1,"done":0,"failed":0,"percent":0}
+[23:44:12.727] {"status":"processing","requestId":"797ccae2-5465-48c2-9023-e9617b97d315","total":1,"done":0,"failed":0,"percent":0}
+[23:44:17.743] {"status":"processing","requestId":"797ccae2-5465-48c2-9023-e9617b97d315","total":1,"done":0,"failed":0,"percent":0}
+[23:44:22.761] {"status":"processing","requestId":"797ccae2-5465-48c2-9023-e9617b97d315","total":1,"done":0,"failed":0,"percent":0}
+[23:44:27.778] {"status":"processing","requestId":"797ccae2-5465-48c2-9023-e9617b97d315","total":1,"done":0,"failed":0,"percent":0}
+[23:44:32.796] {"status":"processing","requestId":"797ccae2-5465-48c2-9023-e9617b97d315","total":1,"done":0,"failed":0,"percent":0}
+[23:44:37.815] {"status":"processing","requestId":"797ccae2-5465-48c2-9023-e9617b97d315","total":1,"done":0,"failed":0,"percent":0}
+[23:44:42.831] {"status":"processing","requestId":"797ccae2-5465-48c2-9023-e9617b97d315","total":1,"done":0,"failed":0,"percent":0}
+[23:44:47.850] {"status":"processing","requestId":"797ccae2-5465-48c2-9023-e9617b97d315","total":1,"done":0,"failed":0,"percent":0}
+[23:44:52.867] {"status":"processing","requestId":"797ccae2-5465-48c2-9023-e9617b97d315","total":1,"done":0,"failed":0,"percent":0}
+[23:44:57.886] {"status":"processing","requestId":"797ccae2-5465-48c2-9023-e9617b97d315","total":1,"done":0,"failed":0,"percent":0}
+[23:45:02.901] {"status":"processing","requestId":"797ccae2-5465-48c2-9023-e9617b97d315","total":1,"done":0,"failed":0,"percent":0}
+[23:45:07.918] {"status":"processing","requestId":"797ccae2-5465-48c2-9023-e9617b97d315","total":1,"done":0,"failed":0,"percent":0}
+[23:45:12.932] {"status":"done","requestId":"797ccae2-5465-48c2-9023-e9617b97d315","total":1,"done":1,"failed":0,"failedFiles":[],"zipUrl":"/download/797ccae2-5465-48c2-9023-e9617b97d315"}
+--- log worker A
+[23:44:04 4/11/2026] Worker Service đang chạy | Concurrency: 1 | Redis: 127.0.0.1:6379
+[23:44:05 4/11/2026] [REQ:797ccae2-5465-48c2-9023-e9617b97d315] START (lần 1): Nhật ký bán hàng cả năm.xlsx
+--- log worker B
+[23:44:06 4/11/2026] Worker Service đang chạy | Concurrency: 1 | Redis: 127.0.0.1:6379
+[23:45:06 4/11/2026] [REQ:797ccae2-5465-48c2-9023-e9617b97d315] START (lần 1): Nhật ký bán hàng cả năm.xlsx
+[23:45:09 4/11/2026] [REQ:797ccae2-5465-48c2-9023-e9617b97d315] DONE: Nhat_ky_ban_hang_ca_nam.pdf
+[23:45:09 4/11/2026] [REQ:797ccae2-5465-48c2-9023-e9617b97d315] ZIP: 1 PDF, 0 file lỗi
+$ ls uploads/ output/
+uploads: 0 file
+output: 797ccae2-5465-48c2-9023-e9617b97d315.zip 

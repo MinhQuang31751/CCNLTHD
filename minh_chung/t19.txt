@@ -1,0 +1,19 @@
+# 04/11/2026 23:46:29 +07 | v24.22.2 | v=7.0.15 | LibreOffice 24.2.7.2 | Ubuntu 24.04.5 LTS, 2 vCPU
+# Tải ZIP: client ngắt giữa chừng, rồi tải lại hai lần
+[23:46:32.893] $ curl -F "excelFiles=@Nhat_ky_01.xlsx" -F "excelFiles=@Nhat_ky_02.xlsx" -F "excelFiles=@Nhat_ky_03.xlsx" http://localhost:3000/upload
+$ curl --limit-rate 20k --max-time 1 -o ngat.zip http://localhost:3000/download/a751c52c-60c7-48e5-850f-6dcd2da2b8a1
+HTTP 200 | nhận 39788 B
+curl exit=28
+$ curl -o lan1.zip http://localhost:3000/download/a751c52c-60c7-48e5-850f-6dcd2da2b8a1
+HTTP 200 | 2163599 B
+dd41bee4ffe0eab7
+$ curl -o lan2.zip http://localhost:3000/download/a751c52c-60c7-48e5-850f-6dcd2da2b8a1
+HTTP 200 | 2163599 B
+dd41bee4ffe0eab7
+$ ls uploads/ output/
+uploads: 0 file
+output: a751c52c-60c7-48e5-850f-6dcd2da2b8a1.zip 
+--- log API (các dòng download)
+{"time":"2026-11-04T16:46:41.168Z","traceId":"90210e95","method":"GET","url":"/download/a751c52c-60c7-48e5-850f-6dcd2da2b8a1","status":200,"ms":12.5}
+{"time":"2026-11-04T16:46:43.180Z","traceId":"f6f183d4","method":"GET","url":"/download/a751c52c-60c7-48e5-850f-6dcd2da2b8a1","status":200,"ms":11.7}
+{"time":"2026-11-04T16:46:43.206Z","traceId":"f8a6141e","method":"GET","url":"/download/a751c52c-60c7-48e5-850f-6dcd2da2b8a1","status":200,"ms":11.1}

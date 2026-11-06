@@ -1,0 +1,9 @@
+# 04/11/2026 23:43:18 +07 | v24.22.2 | v=7.0.15 | LibreOffice 24.2.7.2 | Ubuntu 24.04.5 LTS, 2 vCPU
+$ ls -l big_100MB.xlsx
+104860600 big_100MB.xlsx
+$ curl -F excelFiles=@big_100MB.xlsx http://localhost:3000/upload
+{"status":"error","code":"FILE_TOO_LARGE","message":"File vượt quá dung lượng cho phép.","traceId":"2932a0c1"}
+HTTP 413 | đã gửi 104860824 B | 0.263515s
+$ ls uploads/ output/
+uploads: 0 file
+output: 

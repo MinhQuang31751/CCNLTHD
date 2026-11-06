@@ -1,0 +1,13 @@
+# 04/11/2026 23:47:49 +07 | v24.22.2 | v=7.0.15 | LibreOffice 24.2.7.2 | Ubuntu 24.04.5 LTS, 2 vCPU
+$ npm test
+ℹ tests 31
+ℹ pass 31
+ℹ fail 0
+exit code: 0
+# Thử một bản sao có ca sai: đổi mã mong đợi 413 thành 400 trong test/api.test.js
+$ npm test
+✖ POST /upload file vượt MAX_FILE_MB: 413 FILE_TOO_LARGE, không còn file tạm (14.434374ms)
+ℹ tests 31
+ℹ pass 30
+ℹ fail 1
+exit code: 1

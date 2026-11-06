@@ -9,8 +9,9 @@ const { decodeOriginalName, uniquePdfNames } = require('./filename');
 // Tầng nghiệp vụ: tạo request chuyển đổi, đọc tiến độ, tìm file ZIP.
 // Toàn bộ trạng thái nằm trong Redis (qua BullMQ), API không giữ gì trong RAM.
 function createConversionService() {
-    // enableOfflineQueue: false -> khi mất Redis, lệnh báo lỗi ngay thay vì treo request
-    const connection = { ...config.redis, enableOfflineQueue: false };
+    // enableOfflineQueue: false -> khi mất kết nối Redis, lệnh báo lỗi ngay thay vì treo request.
+    // commandTimeout -> Redis còn kết nối nhưng không trả lời (bị treo) thì lệnh lỗi sau thời hạn này.
+    const connection = { ...config.redis, enableOfflineQueue: false, commandTimeout: config.redisCommandTimeoutMs };
     const flow = new FlowProducer({ connection });
     const zipQueue = new Queue(config.zipQueue, { connection });
     const logRedisError = (err) => console.error(`[REDIS] ${err.message}`);

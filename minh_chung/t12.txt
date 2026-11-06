@@ -1,0 +1,17 @@
+# 04/11/2026 23:43:52 +07 | v24.22.2 | v=7.0.15 | LibreOffice 24.2.7.2 | Ubuntu 24.04.5 LTS, 2 vCPU
+# file 12.000 dòng; khi soffice.bin đang chạy lần đầu thì kill -9 (giả lập LibreOffice chết giữa chừng)
+[23:43:55.404] $ curl -F "excelFiles=@Nhật ký bán hàng cả năm.xlsx" http://localhost:3000/upload
+{"status":"queued","requestId":"ebd224a6-6f7b-4404-8cea-5b496fcbedf6","total":1,"statusUrl":"/status/ebd224a6-6f7b-4404-8cea-5b496fcbedf6"}
+[23:43:56.319] $ pkill -9 -f soffice.bin
+[23:44:02.411] {"status":"done","requestId":"ebd224a6-6f7b-4404-8cea-5b496fcbedf6","total":1,"done":1,"failed":0,"failedFiles":[],"zipUrl":"/download/ebd224a6-6f7b-4404-8cea-5b496fcbedf6"}
+--- log worker
+[23:43:54 4/11/2026] Worker Service đang chạy | Concurrency: 1 | Redis: 127.0.0.1:6379
+[23:43:55 4/11/2026] [REQ:ebd224a6-6f7b-4404-8cea-5b496fcbedf6] START (lần 1): Nhật ký bán hàng cả năm.xlsx
+[23:43:56 4/11/2026] Fail excel-convert ebd224a6-6f7b-4404-8cea-5b496fcbedf6-0 (lần 1): Command failed: /usr/bin/libreoffice -env:UserInstallation=file:///tmp/soffice-13908-XAop5oH8tJVg --headless --convert-to .pdf --outdir /tmp/libreofficeConvert_-13908-1Bpj926iMSXh /tmp/libreofficeConvert_-13908-1Bpj926iMSXh/source
+
+[23:43:58 4/11/2026] [REQ:ebd224a6-6f7b-4404-8cea-5b496fcbedf6] START (lần 2): Nhật ký bán hàng cả năm.xlsx
+[23:44:01 4/11/2026] [REQ:ebd224a6-6f7b-4404-8cea-5b496fcbedf6] DONE: Nhat_ky_ban_hang_ca_nam.pdf
+[23:44:01 4/11/2026] [REQ:ebd224a6-6f7b-4404-8cea-5b496fcbedf6] ZIP: 1 PDF, 0 file lỗi
+$ ls uploads/ output/
+uploads: 0 file
+output: ebd224a6-6f7b-4404-8cea-5b496fcbedf6.zip 

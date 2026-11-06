@@ -1,0 +1,8 @@
+$ redis-cli config set maxmemory 1
+OK
+$ curl -F excelFiles=@Báo cáo doanh thu Q3.xlsx http://localhost:3000/upload
+HTTP 500 | application/json; charset=utf-8 | 0.031888s
+{"status":"error","code":"INTERNAL_ERROR","message":"Lỗi máy chủ.","traceId":"f1e3976f"}
+$ ls uploads/ output/
+uploads: 0 file 
+output: 

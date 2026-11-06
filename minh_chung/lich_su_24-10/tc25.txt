@@ -1,0 +1,18 @@
+# worker concurrency 1; v2 đặt CONVERT_TIMEOUT_SECONDS=15
+[08:08:13.087] $ curl -F "excelFiles=@Nhật ký bán hàng cả năm.xlsx" http://localhost:3000/upload
+[08:08:13.135] {"status":"queued","requestId":"c22a269f-ad6c-48ff-8d03-413970f00ed1","total":1,"statusUrl":"/status/c22a269f-ad6c-48ff-8d03-413970f00ed1"}
+[08:08:13.719] $ kill -STOP $(pgrep -f soffice.bin)   (giả lập LibreOffice treo)
+[08:08:23.737] +10s {"status":"processing","requestId":"c22a269f-ad6c-48ff-8d03-413970f00ed1","total":1,"done":0,"failed":0,"percent":0}
+[08:08:33.782] +20s {"status":"processing","requestId":"c22a269f-ad6c-48ff-8d03-413970f00ed1","total":1,"done":0,"failed":0,"percent":0}
+[08:08:43.824] +30s {"status":"done","requestId":"c22a269f-ad6c-48ff-8d03-413970f00ed1","total":1,"done":1,"failed":0,"failedFiles":[],"zipUrl":"/download/c22a269f-ad6c-48ff-8d03-413970f00ed1"}
+--- log worker
+[08:08:11 24/10/2026] Worker Service đang chạy | Concurrency: 1 | Redis: 127.0.0.1:6379
+[08:08:13 24/10/2026] [REQ:c22a269f-ad6c-48ff-8d03-413970f00ed1] START (lần 1): Nhật ký bán hàng cả năm.xlsx
+[08:08:28 24/10/2026] Fail excel-convert c22a269f-ad6c-48ff-8d03-413970f00ed1-0 (lần 1): Command failed: /usr/bin/libreoffice -env:UserInstallation=file:///tmp/soffice-13157-KI3cI1nJTjBm --headless --convert-to .pdf --outdir /tmp/libreofficeConvert_-13157-1G4kvv0Cte7c /tmp/libreofficeConvert_-13157-1G4kvv0Cte7c/source
+
+[08:08:30 24/10/2026] [REQ:c22a269f-ad6c-48ff-8d03-413970f00ed1] START (lần 2): Nhật ký bán hàng cả năm.xlsx
+[08:08:34 24/10/2026] [REQ:c22a269f-ad6c-48ff-8d03-413970f00ed1] DONE: Nhat_ky_ban_hang_ca_nam.pdf
+[08:08:34 24/10/2026] [REQ:c22a269f-ad6c-48ff-8d03-413970f00ed1] ZIP: 1 PDF, 0 file lỗi
+--- tiến trình soffice còn lại
+  PID STAT     ELAPSED CMD
+13227 Tl         00:30 /usr/lib/libreoffice/program/soffice.bin -env:UserInstall

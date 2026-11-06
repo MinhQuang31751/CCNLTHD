@@ -1,0 +1,7 @@
+# 04/11/2026 23:54:13 +07 | v24.22.2 | v=7.0.15 | LibreOffice 24.2.7.2 | Ubuntu 24.04.5 LTS, 2 vCPU | mã: phiên bản đầu
+# 20 file tồn kho (400 dòng mỗi file) trong một request; thời gian từ lúc upload tới khi /status trả done (đã gồm nén ZIP)
+cauhinh;so_worker;concurrency;lan;upload_s;tong_s;ket_qua
+W1C1;1;1;1;0.073;29.24;done 20 0
+W1C1;1;1;2;0.071;29.58;done 20 0
+W1C2;1;2;1;0.068;16.50;done 20 0
+W1C2;1;2;2;0.065;17.00;done 20 0

@@ -1,0 +1,18 @@
+# 04/11/2026 23:46:43 +07 | v24.22.2 | v=7.0.15 | LibreOffice 24.2.7.2 | Ubuntu 24.04.5 LTS, 2 vCPU
+# worker concurrency 1, CONVERT_TIMEOUT_SECONDS=15
+[23:46:46.363] $ curl -F "excelFiles=@Nhật ký bán hàng cả năm.xlsx" http://localhost:3000/upload
+[23:46:46.410] {"status":"queued","requestId":"89b7a8c3-f8bf-4bdd-a453-3d62b146763e","total":1,"statusUrl":"/status/89b7a8c3-f8bf-4bdd-a453-3d62b146763e"}
+[23:46:47.084] $ kill -STOP $(pgrep -f soffice.bin)   (giả lập LibreOffice treo)
+[23:46:57.096] +10s {"status":"processing","requestId":"89b7a8c3-f8bf-4bdd-a453-3d62b146763e","total":1,"done":0,"failed":0,"percent":0}
+[23:47:07.130] +20s {"status":"done","requestId":"89b7a8c3-f8bf-4bdd-a453-3d62b146763e","total":1,"done":1,"failed":0,"failedFiles":[],"zipUrl":"/download/89b7a8c3-f8bf-4bdd-a453-3d62b146763e"}
+--- log worker
+[23:46:45 4/11/2026] Worker Service đang chạy | Concurrency: 1 | Redis: 127.0.0.1:6379
+[23:46:46 4/11/2026] [REQ:89b7a8c3-f8bf-4bdd-a453-3d62b146763e] START (lần 1): Nhật ký bán hàng cả năm.xlsx
+[23:47:01 4/11/2026] Fail excel-convert 89b7a8c3-f8bf-4bdd-a453-3d62b146763e-0 (lần 1): Command failed: /usr/bin/libreoffice -env:UserInstallation=file:///tmp/soffice-16281-HFeMIpdu4z52 --headless --convert-to .pdf --outdir /tmp/libreofficeConvert_-16281-xSEJuPzooLnp /tmp/libreofficeConvert_-16281-xSEJuPzooLnp/source
+
+[23:47:03 4/11/2026] [REQ:89b7a8c3-f8bf-4bdd-a453-3d62b146763e] START (lần 2): Nhật ký bán hàng cả năm.xlsx
+[23:47:06 4/11/2026] [REQ:89b7a8c3-f8bf-4bdd-a453-3d62b146763e] DONE: Nhat_ky_ban_hang_ca_nam.pdf
+[23:47:06 4/11/2026] [REQ:89b7a8c3-f8bf-4bdd-a453-3d62b146763e] ZIP: 1 PDF, 0 file lỗi
+--- tiến trình soffice còn lại
+  PID STAT     ELAPSED CMD
+16353 Tl         00:20 /usr/lib/libreoffice/program/soffice.bin -env:UserInstall

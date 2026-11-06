@@ -1,0 +1,33 @@
+# 04/11/2026 23:43:23 +07 | v24.22.2 | v=7.0.15 | LibreOffice 24.2.7.2 | Ubuntu 24.04.5 LTS, 2 vCPU
+# 3 file tên tiếng Việt: upload, hỏi trạng thái mỗi giây, tải ZIP
+[23:43:26.137] $ curl -F "excelFiles=@Báo cáo doanh thu Q3.xlsx" -F "excelFiles=@Danh sách lớp DCT01.xlsx" -F "excelFiles=@Bảng chấm công tháng 9.xlsx" http://localhost:3000/upload
+{"status":"queued","requestId":"f3db7483-219f-42a0-b882-c89332f02196","total":3,"statusUrl":"/status/f3db7483-219f-42a0-b882-c89332f02196"}
+HTTP 202 | 0.031083s
+[23:43:26.259] {"status":"processing","requestId":"f3db7483-219f-42a0-b882-c89332f02196","total":3,"done":0,"failed":0,"percent":0}
+[23:43:27.291] {"status":"processing","requestId":"f3db7483-219f-42a0-b882-c89332f02196","total":3,"done":0,"failed":0,"percent":0}
+[23:43:28.316] {"status":"processing","requestId":"f3db7483-219f-42a0-b882-c89332f02196","total":3,"done":2,"failed":0,"percent":67}
+[23:43:29.334] {"status":"done","requestId":"f3db7483-219f-42a0-b882-c89332f02196","total":3,"done":3,"failed":0,"failedFiles":[],"zipUrl":"/download/f3db7483-219f-42a0-b882-c89332f02196"}
+GET /download/f3db7483-219f-42a0-b882-c89332f02196 -> HTTP 200 | 71478 B | 0.007608s
+$ unzip -l ket_qua.zip
+    22630  2026-11-04 23:43   Bang_cham_cong_thang_9.pdf
+    24940  2026-11-04 23:43   Bao_cao_doanh_thu_Q3.pdf
+    28897  2026-11-04 23:43   Danh_sach_lop_DCT01.pdf
+---------                     -------
+    76467                     3 files
+--- log worker
+[23:43:24 4/11/2026] Worker Service đang chạy | Concurrency: 2 | Redis: 127.0.0.1:6379
+[23:43:26 4/11/2026] [REQ:f3db7483-219f-42a0-b882-c89332f02196] START (lần 1): Báo cáo doanh thu Q3.xlsx
+[23:43:26 4/11/2026] [REQ:f3db7483-219f-42a0-b882-c89332f02196] START (lần 1): Danh sách lớp DCT01.xlsx
+[23:43:27 4/11/2026] [REQ:f3db7483-219f-42a0-b882-c89332f02196] DONE: Bao_cao_doanh_thu_Q3.pdf
+[23:43:27 4/11/2026] [REQ:f3db7483-219f-42a0-b882-c89332f02196] START (lần 1): Bảng chấm công tháng 9.xlsx
+[23:43:27 4/11/2026] [REQ:f3db7483-219f-42a0-b882-c89332f02196] DONE: Danh_sach_lop_DCT01.pdf
+[23:43:29 4/11/2026] [REQ:f3db7483-219f-42a0-b882-c89332f02196] DONE: Bang_cham_cong_thang_9.pdf
+[23:43:29 4/11/2026] [REQ:f3db7483-219f-42a0-b882-c89332f02196] ZIP: 3 PDF, 0 file lỗi
+$ ls uploads/ output/
+uploads: 0 file
+output: f3db7483-219f-42a0-b882-c89332f02196.zip 
+--- log API (các dòng POST, 2 dòng status đầu, dòng download)
+{"time":"2026-11-04T16:43:26.177Z","traceId":"8a3c118e","method":"POST","url":"/upload","status":202,"ms":29.5}
+{"time":"2026-11-04T16:43:29.388Z","traceId":"be1304b8","method":"GET","url":"/download/f3db7483-219f-42a0-b882-c89332f02196","status":200,"ms":6.6}
+{"time":"2026-11-04T16:43:26.252Z","traceId":"a920fc25","method":"GET","url":"/status/f3db7483-219f-42a0-b882-c89332f02196","status":200,"ms":14.6}
+{"time":"2026-11-04T16:43:27.286Z","traceId":"9915e92f","method":"GET","url":"/status/f3db7483-219f-42a0-b882-c89332f02196","status":200,"ms":5}

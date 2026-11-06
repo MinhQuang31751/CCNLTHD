@@ -1,0 +1,12 @@
+# 04/11/2026 23:42:59 +07 | v24.22.2 | v=7.0.15 | LibreOffice 24.2.7.2 | Ubuntu 24.04.5 LTS, 2 vCPU
+$ curl "http://localhost:3000/khong-ton-tai"
+{"status":"error","code":"NOT_FOUND","message":"Không có đường dẫn GET /khong-ton-tai","traceId":"e157809b"}
+HTTP 404
+$ curl "http://localhost:3000/download-zip/..%2F..%2Fpackage.json"
+{"status":"error","code":"NOT_FOUND","message":"Không có đường dẫn GET /download-zip/..%2F..%2Fpackage.json","traceId":"5f208d3c"}
+HTTP 404
+$ curl "http://localhost:3000/download/..%2F..%2Fpackage.json"
+{"status":"error","code":"INVALID_REQUEST_ID","message":"requestId không hợp lệ.","details":["Invalid UUID"],"traceId":"9a99a62b"}
+HTTP 400
+$ ls -l package.json
+799 package.json

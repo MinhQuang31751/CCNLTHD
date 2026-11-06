@@ -1,0 +1,9 @@
+# 04/11/2026 23:47:42 +07 | v24.22.2 | v=7.0.15 | LibreOffice 24.2.7.2 | Ubuntu 24.04.5 LTS, 2 vCPU
+# File 24 cột (rộng hơn khổ A4 dọc) và file 5 cột qua hệ thống
+[23:47:45.740] $ curl -F "excelFiles=@Bảng lương chi tiết.xlsx" -F "excelFiles=@Báo cáo doanh thu Q3.xlsx" http://localhost:3000/upload
+[23:47:47.953] {"status":"done","requestId":"cc625b0b-79d1-431d-9196-54b5d1edfac6","total":2,"done":2,"failed":0,"failedFiles":[],"zipUrl":"/download/cc625b0b-79d1-431d-9196-54b5d1edfac6"}
+# Đối chứng: chuyển thẳng file gốc bằng LibreOffice, không qua src/pagesetup.js
+$ soffice --headless --convert-to pdf 'Bảng lương chi tiết.xlsx'
+he_thong/Bang_luong_chi_tiet.pdf: 1 trang, khổ 841.89 x 595.304 pts (A4)
+he_thong/Bao_cao_doanh_thu_Q3.pdf: 1 trang, khổ 595.304 x 841.89 pts (A4)
+goc/Bang_luong_chi_tiet.pdf: 4 trang, khổ 595.304 x 841.89 pts (A4)

@@ -1,0 +1,17 @@
+# 04/11/2026 23:47:13 +07 | v24.22.2 | v=7.0.15 | LibreOffice 24.2.7.2 | Ubuntu 24.04.5 LTS, 2 vCPU
+# Không ai hỏi /status (người dùng đóng trình duyệt sau khi upload)
+[23:47:16.553] $ curl -F "excelFiles=@Báo cáo doanh thu Q3.xlsx" -F "excelFiles=@Danh sách lớp DCT01.xlsx" -F "excelFiles=@Bảng chấm công tháng 9.xlsx" http://localhost:3000/upload
+[23:47:16.604] {"status":"queued","requestId":"c3c646c6-a9fd-47f2-9a82-a9e7441abfd9","total":3,"statusUrl":"/status/c3c646c6-a9fd-47f2-9a82-a9e7441abfd9"}
+[23:47:36.647] (20 giây sau, không gọi /status)
+$ ls uploads/ output/
+uploads: 0 file
+output: c3c646c6-a9fd-47f2-9a82-a9e7441abfd9.zip 
+--- log worker
+[23:47:15 4/11/2026] Worker Service đang chạy | Concurrency: 2 | Redis: 127.0.0.1:6379
+[23:47:16 4/11/2026] [REQ:c3c646c6-a9fd-47f2-9a82-a9e7441abfd9] START (lần 1): Báo cáo doanh thu Q3.xlsx
+[23:47:16 4/11/2026] [REQ:c3c646c6-a9fd-47f2-9a82-a9e7441abfd9] START (lần 1): Danh sách lớp DCT01.xlsx
+[23:47:18 4/11/2026] [REQ:c3c646c6-a9fd-47f2-9a82-a9e7441abfd9] DONE: Danh_sach_lop_DCT01.pdf
+[23:47:18 4/11/2026] [REQ:c3c646c6-a9fd-47f2-9a82-a9e7441abfd9] START (lần 1): Bảng chấm công tháng 9.xlsx
+[23:47:18 4/11/2026] [REQ:c3c646c6-a9fd-47f2-9a82-a9e7441abfd9] DONE: Bao_cao_doanh_thu_Q3.pdf
+[23:47:19 4/11/2026] [REQ:c3c646c6-a9fd-47f2-9a82-a9e7441abfd9] DONE: Bang_cham_cong_thang_9.pdf
+[23:47:19 4/11/2026] [REQ:c3c646c6-a9fd-47f2-9a82-a9e7441abfd9] ZIP: 3 PDF, 0 file lỗi

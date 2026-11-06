@@ -1,0 +1,13 @@
+# 04/11/2026 23:47:07 +07 | v24.22.2 | v=7.0.15 | LibreOffice 24.2.7.2 | Ubuntu 24.04.5 LTS, 2 vCPU
+# Hai request /status cùng lúc ngay khi batch xong
+[23:47:10.296] $ curl -F "excelFiles=@Báo cáo doanh thu Q3.xlsx" -F "excelFiles=@Danh sách lớp DCT01.xlsx" -F "excelFiles=@Bảng chấm công tháng 9.xlsx" http://localhost:3000/upload
+{"status":"queued","requestId":"f2190e85-aef1-4392-8a46-6ebd9db7059a","total":3,"statusUrl":"/status/f2190e85-aef1-4392-8a46-6ebd9db7059a"}
+# đợi worker nén ZIP (không gọi /status)
+[23:47:13.280] $ curl /status/<id> & curl /status/<id> &   (hai request song song)
+A: {"status":"done","requestId":"f2190e85-aef1-4392-8a46-6ebd9db7059a","total":3,"done":3,"failed":0,"failedFiles":[],"zipUrl":"/download/f2190e85-aef1-4392-8a46-6ebd9db7059a"}  -> HTTP 200
+B: {"status":"done","requestId":"f2190e85-aef1-4392-8a46-6ebd9db7059a","total":3,"done":3,"failed":0,"failedFiles":[],"zipUrl":"/download/f2190e85-aef1-4392-8a46-6ebd9db7059a"}  -> HTTP 200
+--- log worker
+[23:47:13 4/11/2026] [REQ:f2190e85-aef1-4392-8a46-6ebd9db7059a] ZIP: 3 PDF, 0 file lỗi
+$ ls uploads/ output/
+uploads: 0 file
+output: f2190e85-aef1-4392-8a46-6ebd9db7059a.zip 

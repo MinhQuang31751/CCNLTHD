@@ -1,0 +1,26 @@
+# 04/11/2026 23:48:03 +07 | v24.22.2 | v=7.0.15 | LibreOffice 24.2.7.2 | Ubuntu 24.04.5 LTS, 2 vCPU
+# Redis còn chạy nhưng bị treo (kill -STOP): kết nối TCP vẫn mở, lệnh gửi đi không có trả lời
+[23:48:06.583] $ kill -STOP 17937
+[23:48:06.585] $ curl --max-time 15 -F excelFiles=@Báo cáo doanh thu Q3.xlsx http://localhost:3000/upload
+{"status":"error","code":"QUEUE_UNAVAILABLE","message":"Hàng đợi tạm thời không dùng được, vui lòng thử lại sau.","traceId":"59b296c7"}
+HTTP 503 | 5.034509s
+curl exit=0
+$ ls uploads/ output/
+uploads: 0 file
+output: 
+[23:48:11.642] $ kill -CONT 17937
+--- log API (trích)
+{"traceId":"59b296c7","level":"error","code":"QUEUE_UNAVAILABLE","error":"Error: Command timed out\n    at Timeout.<anonymous> (/tmp/claude-0/-home-claude/60d20ac7-98d3-55d0-b899-f90ffd9f1e2d/scratchp
+{"time":"2026-11-04T16:48:11.626Z","traceId":"59b296c7","method":"POST","url":"/upload","status":503,"ms":5031.9}
+--- log worker 12 giây sau khi Redis chạy tiếp
+[23:48:05 4/11/2026] Worker Service đang chạy | Concurrency: 2 | Redis: 127.0.0.1:6379
+[23:48:11 4/11/2026] [REQ:46d7988e-2086-477f-a74e-15c5074834dc] START (lần 1): Báo cáo doanh thu Q3.xlsx
+[23:48:11 4/11/2026] Fail excel-convert 46d7988e-2086-477f-a74e-15c5074834dc-0 (lần 1): ENOENT: no such file or directory, open '/tmp/claude-0/-home-claude/60d20ac7-98d3-55d0-b899-f90ffd9f1e2d/scrat
+[23:48:13 4/11/2026] [REQ:46d7988e-2086-477f-a74e-15c5074834dc] START (lần 2): Báo cáo doanh thu Q3.xlsx
+[23:48:13 4/11/2026] Fail excel-convert 46d7988e-2086-477f-a74e-15c5074834dc-0 (lần 2): ENOENT: no such file or directory, open '/tmp/claude-0/-home-claude/60d20ac7-98d3-55d0-b899-f90ffd9f1e2d/scrat
+[23:48:17 4/11/2026] [REQ:46d7988e-2086-477f-a74e-15c5074834dc] START (lần 3): Báo cáo doanh thu Q3.xlsx
+[23:48:17 4/11/2026] Fail excel-convert 46d7988e-2086-477f-a74e-15c5074834dc-0 (lần 3): ENOENT: no such file or directory, open '/tmp/claude-0/-home-claude/60d20ac7-98d3-55d0-b899-f90ffd9f1e2d/scrat
+[23:48:17 4/11/2026] [REQ:46d7988e-2086-477f-a74e-15c5074834dc] ZIP: 0 PDF, 1 file lỗi
+$ ls uploads/ output/
+uploads: 0 file
+output: 46d7988e-2086-477f-a74e-15c5074834dc.zip 

@@ -1,0 +1,9 @@
+# 04/11/2026 23:47:51 +07 | v24.22.2 | v=7.0.15 | LibreOffice 24.2.7.2 | Ubuntu 24.04.5 LTS, 2 vCPU
+$ npm run test:e2e
+ĐẠT  upload 2 file → 202 queued
+ĐẠT  trạng thái chuyển sang done trong 120 s, không file nào lỗi
+ĐẠT  tải ZIP → 200, có 2 file PDF đúng tên
+ĐẠT  bảng 24 cột in khổ ngang, bảng 5 cột giữ khổ dọc
+ĐẠT  tải lại lần hai vẫn được (ZIP chưa bị xóa)
+5/5 ca đạt
+exit code: 0
