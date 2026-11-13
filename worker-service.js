@@ -105,3 +105,15 @@ process.on('SIGTERM', () => shutdown('SIGTERM'));
 process.on('SIGINT', () => shutdown('SIGINT'));
 
 log(`Worker Service đang chạy | Concurrency: ${config.workerConcurrency} | Redis: ${config.redis.host}:${config.redis.port}`);
+
+
+
+
+
+
+
+
+
+
+//cd "$env:LOCALAPPDATA\Programs\Redis\Redis-8.10.3-Windows-x64-msys2"
+//.\redis-server.exe --bind 127.0.0.1 --port 6379

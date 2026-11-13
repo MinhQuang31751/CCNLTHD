@@ -6,9 +6,9 @@ const express = require('express');
 const jobs = new Map([['11111111-1111-4111-8111-111111111111', { state: 'completed' }]]);
 const queue = {
     async getJob(id) {
-        if (process.env.QUEUE_DOWN === '1') return new Promise(() => {});
-        if (!/^[0-9a-f-]{36}$/i.test(id)) throw new TypeError(`invalid job id: ${id}`);
-        return jobs.get(id) || null;
+        if (process.env.QUEUE_DOWN === '1') return new Promise(() => {});//hàng đợi treo
+        if (!/^[0-9a-f-]{36}$/i.test(id)) throw new TypeError(`invalid job id: ${id}`); //lỗi bất đồng bộ
+        return jobs.get(id) || null; //trả null nếu không có job
     },
 };
 
